@@ -45,7 +45,8 @@ namespace Data
                 a.HasKey(k => k.ID);
                 a.Property(x => x.ID).UseIdentityColumn();
                 a.Property(x => x.ExecutionDate);
-                a.Property(x => x.SearchString);
+                a.Property(x => x.SearchString).HasMaxLength(255);
+                a.HasIndex(x => x.SearchString).IsUnique(true);
             });
 
             modelBuilder.Entity<SearchRequestAndRepository>()

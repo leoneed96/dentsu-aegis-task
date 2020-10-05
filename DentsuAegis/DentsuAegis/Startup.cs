@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Data;
+using Data.Services;
 using GitHubClientLib;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -28,10 +29,13 @@ namespace DentsuAegis
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers();
+            services.AddControllers().AddNewtonsoftJson(options =>
+                options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
+            );
             services.Configure<GitHubClientOptions>(Configuration.GetSection(nameof(GitHubClientOptions)));
             //services.AddOptions<GitHubClientOptions>(nameof(GitHubClientOptions));
             services.AddSingleton<IGitHubClient, GitHubClient>();
+            services.AddScoped<IRepositoryCrudService, RepositoryCrudService>();
             services.AddHttpClient();
 
             services.AddDbContext<DataContext>(o => o.UseNpgsql(Configuration.GetConnectionString(nameof(DataContext))));
