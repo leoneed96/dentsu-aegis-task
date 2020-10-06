@@ -29,6 +29,17 @@ namespace DentsuAegis
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddCors(options =>
+    {
+        options.AddPolicy("AllowAllOriginsPolicy",
+        builder =>
+        {
+            builder
+                .SetIsOriginAllowed((x => true))
+                .AllowAnyOrigin();
+        });
+    });
+
             services.AddControllers().AddNewtonsoftJson(options =>
                 options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
             );
@@ -52,6 +63,7 @@ namespace DentsuAegis
             app.UseHttpsRedirection();
 
             app.UseRouting();
+            app.UseCors("AllowAllOriginsPolicy");
 
             app.UseAuthorization();
 
@@ -60,11 +72,6 @@ namespace DentsuAegis
                 endpoints.MapControllers();
             });
 
-            app.UseCors(builder =>
-           builder.WithOrigins("http://localhost:8080")
-             .AllowAnyHeader()
-             .AllowAnyMethod()
-             .AllowCredentials());
         }
     }
 }
