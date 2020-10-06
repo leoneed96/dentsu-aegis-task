@@ -57,9 +57,9 @@ export default {
   data: () => ({
     //
   }),
-  mounted(){
+  async mounted(){
     debugger;
-    this.$store.dispatch("getLastSearch");
+    await this.$store.dispatch("getLastSearch");
   }
 };
 </script>

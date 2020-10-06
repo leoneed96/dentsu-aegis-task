@@ -59,6 +59,12 @@ namespace DentsuAegis
             {
                 endpoints.MapControllers();
             });
+
+            app.UseCors(builder =>
+           builder.WithOrigins("http://localhost:8080")
+             .AllowAnyHeader()
+             .AllowAnyMethod()
+             .AllowCredentials());
         }
     }
 }
