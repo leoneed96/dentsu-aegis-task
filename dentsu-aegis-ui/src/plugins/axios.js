@@ -3,7 +3,7 @@ let axiosInstance = null;
 export default{
     getInstance(){
         if(!axiosInstance){
-            axiosInstance = axios.create({baseURL: "https://localhost:44378/"});
+            axiosInstance = axios.create({baseURL: "http://localhost:5000/"});
         }
         return axiosInstance;
     }

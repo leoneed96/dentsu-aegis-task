@@ -17,5 +17,8 @@ export default new Vuetify({
         warning: '#FFC107'
       },
     },
+    icons: {
+      iconfont: 'mdiSvg', // 'mdi' || 'mdiSvg' || 'md' || 'fa' || 'fa4' || 'faSvg'
+    }
   },
 });
