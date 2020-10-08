@@ -9,7 +9,7 @@
       item-value="id"
       label="Saved search"
     ></v-autocomplete>
-    <v-btn @click="refreshSearch" class="ma-2" color="info">Refresh selected search</v-btn>
+    <v-btn :disabled="!selectedSearch" @click="refreshSearch" class="ma-2" color="info">Refresh selected search</v-btn>
 
     </div>
 
