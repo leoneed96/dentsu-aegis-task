@@ -9,7 +9,7 @@
       item-value="id"
       label="Saved search"
     ></v-autocomplete>
-    <v-btn class="ma-2" color="info">Refresh list</v-btn>
+    <v-btn @click="refreshSearch" class="ma-2" color="info">Refresh selected search</v-btn>
 
     </div>
 
@@ -18,7 +18,7 @@
       <v-btn @click="initNewSearch" class="ma-2" color="info">Search</v-btn>
 
     </div>
-   
+   <div v-if="state.repositoriesLoaded">
     <div v-if="repositories.length">
       <v-card class="ma-1" v-for="repo in repositories" :key="repo.id">
         <v-card-title>
@@ -62,7 +62,15 @@
         </v-card-text>
       </v-card>
     </div>
-    <div v-else>No repositories found</div>
+    <div class="text-center" v-else-if="selectedSearch">No repositories found</div>
+    <div class="text-center" v-else>No last search found. Init new search to see repositories.</div>
+   </div>
+   <div v-else>
+     <v-progress-linear
+      indeterminate
+      color="primary"
+    ></v-progress-linear>
+   </div>
   </v-container>
 </template>
 
@@ -102,6 +110,9 @@ export default {
     async initNewSearch(){
        this.selectedSearch = await this.$store.dispatch('getNewSearch', this.newSearch);
        console.log(this.selectedSearch);
+    },
+    async refreshSearch(){
+       await this.$store.dispatch('refreshSearch', this.selectedSearch);
     }
   },
   async mounted() {

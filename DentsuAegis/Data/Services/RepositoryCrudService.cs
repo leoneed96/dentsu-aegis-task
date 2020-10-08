@@ -30,12 +30,7 @@ namespace Data.Services
                 ExecutionDate = DateTime.Now,
                 SearchString = query
             };
-            searchRequest.SearchRequestAndRepositories = repositories
-                .Select(x => new SearchRequestAndRepository()
-                {
-                    Repository = x,
-                    SearchRequest = searchRequest
-                }).ToList();
+            searchRequest.Repositories = repositories.ToList();
 
             await _dataContext.SearchRequests.AddAsync(searchRequest);
 
@@ -48,20 +43,16 @@ namespace Data.Services
                 .OrderByDescending(x => x.ExecutionDate);
 
         public async Task<IEnumerable<RepositoryInfo>> GetSearchResults(int searchID) =>
-            await _dataContext.SearchRequestAndRepositories
-                .Where(x => x.SearchRequest.ID == searchID)
-                .Select(x => x.Repository)
+            await _dataContext.SearchRequests
+                .Where(x => x.ID == searchID)
+                .SelectMany(x => x.Repositories)
                 .ToListAsync();
 
         public async Task<SearchRequest> UpdateSearchRequest(SearchRequest searchRequest, IEnumerable<RepositoryInfo> repositories)
         {
             searchRequest.ExecutionDate = DateTime.Now;
 
-            searchRequest.SearchRequestAndRepositories = repositories.Select(x => new SearchRequestAndRepository()
-            {
-                Repository = x,
-                SearchRequest = searchRequest
-            }).ToList();
+            searchRequest.Repositories = repositories.ToList();
 
             _dataContext.Update(searchRequest);
 

@@ -16,8 +16,7 @@ namespace Data.Entities
         public int Stars { get; set; }
         public int Forks { get; set; }
         public DateTime LastUpdate { get; set; }
-
-        public ICollection<SearchRequestAndRepository> SearchRequestAndRepositories { get; set; }
-
+        public int SearchId { get; set; }
+        public SearchRequest Search { get; set; }
     }
 }

@@ -4,12 +4,11 @@ using System.Text;
 
 namespace Data.Entities
 {
-    public class SearchRequestAndRepository
+    public class SearchRequest
     {
-        public SearchRequest SearchRequest { get; set; }
-        public int SearchRequestID { get; set; }
-
-        public RepositoryInfo Repository { get; set; }
-        public int RepositoryID { get; set; }
+        public int ID { get; set; }
+        public string SearchString { get; set; }
+        public DateTime ExecutionDate { get; set; }
+        public ICollection<RepositoryInfo> Repositories{ get; set; }
     }
 }

@@ -42,8 +42,7 @@ namespace DentsuAegis.Controllers
         {
             var repositories = await _repositoryCrudService.GetSearchRequests()
                 .Where(x => x.ID == searchID)
-                .SelectMany(x => x.SearchRequestAndRepositories)
-                .Select(x => x.Repository)
+                .SelectMany(x => x.Repositories)
                 .ToListAsync();
 
             return Ok(repositories);
@@ -56,7 +55,7 @@ namespace DentsuAegis.Controllers
             var repositories = (await _gHubClient.SearchAsync(query)).ToEntity();
 
             var existingSearch = await _repositoryCrudService.GetSearchRequests()
-                .Include(x => x.SearchRequestAndRepositories)
+                .Include(x => x.Repositories)
                 .Where(x => x.SearchString.Equals(query))
                 .SingleOrDefaultAsync();
 
@@ -75,7 +74,7 @@ namespace DentsuAegis.Controllers
         public async Task<IActionResult> RefreshSearch([FromRoute]int searchID)
         {
             var searchRequest = await _repositoryCrudService.GetSearchRequests()
-                .Include(x => x.SearchRequestAndRepositories)
+                .Include(x => x.Repositories)
                 .Where(x => x.ID == searchID)
                 .SingleOrDefaultAsync();
 

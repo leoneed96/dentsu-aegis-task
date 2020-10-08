@@ -8,7 +8,6 @@ namespace Data
     {
         public DbSet<RepositoryInfo> Repositories { get; set; }
         public DbSet<SearchRequest> SearchRequests { get; set; }
-        public DbSet<SearchRequestAndRepository> SearchRequestAndRepositories { get; set; }
         public DataContext(DbContextOptions<DataContext> options)
             :base(options)
         {
@@ -16,7 +15,6 @@ namespace Data
         }
         public DataContext()
         {
-            //Database.EnsureCreated();
             Database.Migrate();
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -38,6 +36,10 @@ namespace Data
                 a.Property(x => x.Link);
                 a.Property(x => x.Stars);
                 a.Property(x => x.Title);
+
+                a.HasOne(x => x.Search)
+                    .WithMany(x => x.Repositories)
+                    .HasForeignKey(x => x.SearchId);
             });
 
             modelBuilder.Entity<SearchRequest>(a =>
@@ -48,18 +50,6 @@ namespace Data
                 a.Property(x => x.SearchString).HasMaxLength(255);
                 a.HasIndex(x => x.SearchString).IsUnique(true);
             });
-
-            modelBuilder.Entity<SearchRequestAndRepository>()
-            .HasKey(x => new { x.SearchRequestID, x.RepositoryID });
-
-            modelBuilder.Entity<SearchRequestAndRepository>()
-                .HasOne(x => x.Repository)
-                .WithMany(x => x.SearchRequestAndRepositories)
-                .HasForeignKey(x => x.RepositoryID);
-            modelBuilder.Entity<SearchRequestAndRepository>()
-                .HasOne(x => x.SearchRequest)
-                .WithMany(x => x.SearchRequestAndRepositories)
-                .HasForeignKey(x => x.SearchRequestID);
 
             base.OnModelCreating(modelBuilder);
         }
